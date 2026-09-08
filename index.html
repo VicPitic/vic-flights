@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#160807" />
+    <meta name="description" content="Vic's personal flight archive, mapped across the globe." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://unpkg.com" crossorigin />
+    <title>Vic's Flight Atlas</title>
+  </head>
+  <body data-ready="false">
+    <main class="app-shell">
+      <section id="globeViz" aria-label="Interactive globe showing Vic's flights"></section>
+      <header class="brand-panel enter-stage" style="--enter-delay: 80ms">
+        <h1>vic's flights</h1>
+        <p class="intro">five years in motion.</p>
+        <p class="stats" aria-label="Flight totals"><strong id="segmentCount">27</strong> <span id="segmentLabel">flight legs</span> · <strong id="journeyCount">13</strong> <span id="journeyLabel">journeys</span> · <strong id="airportCount">18</strong> <span id="airportLabel">airports</span></p>
+
+        <fieldset class="year-filter" aria-label="Filter flights by year">
+          <legend class="sr-only">Filter flights by year</legend>
+          <button type="button" class="year-button is-active" data-year="all" aria-pressed="true">all</button>
+          <button type="button" class="year-button" data-year="future" aria-pressed="false">future</button>
+          <button type="button" class="year-button" data-year="2026" aria-pressed="false">2026</button>
+          <button type="button" class="year-button" data-year="2025" aria-pressed="false">2025</button>
+          <button type="button" class="year-button" data-year="2024" aria-pressed="false">2024</button>
+          <button type="button" class="year-button" data-year="2023" aria-pressed="false">2023</button>
+        </fieldset>
+
+        <label class="journey-picker" for="journeySelect">
+          <span>jump to a journey</span>
+          <select id="journeySelect" name="journey">
+            <option value="">choose a route</option>
+          </select>
+        </label>
+        <button id="motionToggle" class="motion-toggle" type="button" aria-pressed="false">
+          <span id="motionToggleLabel">pause motion</span>
+        </button>
+      </header>
+
+      <aside id="routePanel" class="route-panel is-empty" aria-live="polite" aria-label="Selected journey details" aria-hidden="true">
+        <div class="panel-head">
+          <p id="panelEyebrow" class="eyebrow">route details</p>
+          <button id="closePanel" class="icon-button" type="button" aria-label="Clear selected journey" hidden>
+            close
+          </button>
+        </div>
+        <div id="panelContent" class="panel-content">
+          <h2>Choose a route</h2>
+          <p>Drag the globe, select an arc, or use the journey picker to open a complete itinerary.</p>
+        </div>
+      </aside>
+
+      <div class="map-legend enter-stage" style="--enter-delay: 340ms" aria-label="Route color legend">
+        <span><i style="--legend-color: #ff9966"></i>2023</span>
+        <span><i style="--legend-color: #ff6f61"></i>2024</span>
+        <span><i style="--legend-color: #ffd966"></i>2025</span>
+        <span><i style="--legend-color: #ffcc00"></i>2026</span>
+      </div>
+
+      <p class="credit enter-stage" style="--enter-delay: 160ms">from vic's flight history</p>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
