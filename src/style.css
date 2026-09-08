@@ -68,7 +68,7 @@ select {
 .brand-panel {
   top: 30px;
   left: 40px;
-  width: min(300px, calc(100vw - 80px));
+  width: min(330px, calc(100vw - 80px));
 }
 
 h1,
@@ -93,19 +93,43 @@ h1 {
 }
 
 .intro {
-  margin-bottom: 4px;
+  margin-bottom: 14px;
   font-size: 16px;
 }
 
 .stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px 14px;
   margin: 0;
-  color: var(--muted);
-  font-size: 12px;
 }
 
-.stats strong {
+.stat-item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column-reverse;
+}
+
+.stat-item dt,
+.trip-stats dt {
+  color: var(--quiet);
+  font-size: 9px;
+  line-height: 1.35;
+}
+
+.stat-item dd,
+.trip-stats dd {
+  margin: 0;
   color: var(--ink);
+  font-size: 12px;
   font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+}
+
+.stat-item-primary dd {
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .year-filter {
@@ -244,6 +268,27 @@ h1 {
   line-height: 1.55;
 }
 
+.trip-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 14px 0 0;
+  padding: 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.trip-stats > div {
+  display: flex;
+  min-width: 0;
+  flex-direction: column-reverse;
+}
+
+.trip-stats dd {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .segment-list {
   margin: 14px 0 0;
   padding: 0;
@@ -307,6 +352,7 @@ h1 {
   overflow-wrap: anywhere;
   color: var(--muted);
   font-size: 9px;
+  font-variant-numeric: tabular-nums;
   line-height: 1.45;
 }
 

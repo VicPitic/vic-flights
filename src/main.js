@@ -43,6 +43,10 @@ const dom = {
   journeyLabel: document.getElementById('journeyLabel'),
   airportCount: document.getElementById('airportCount'),
   airportLabel: document.getElementById('airportLabel'),
+  countryCount: document.getElementById('countryCount'),
+  countryLabel: document.getElementById('countryLabel'),
+  distanceCount: document.getElementById('distanceCount'),
+  airtimeCount: document.getElementById('airtimeCount'),
   yearButtons: [...document.querySelectorAll('.year-button')],
   journeySelect: document.getElementById('journeySelect'),
   motionToggle: document.getElementById('motionToggle'),
@@ -208,6 +212,9 @@ function applyFilter() {
   const visibleSegments = segmentData.filter((segment) => visibleIds.has(segment.tripId));
   const visibleAirportCodes = new Set(visibleSegments.flatMap((segment) => [segment.from, segment.to]));
   const visibleAirports = airportData.filter((airport) => visibleAirportCodes.has(airport.code));
+  const visibleCountries = new Set(visibleAirports.map((airport) => airport.country));
+  const distance = getSegmentsDistance(visibleSegments);
+  const airtime = getSegmentsAirtime(visibleSegments);
 
   dom.yearButtons.forEach((button) => {
     const active = button.dataset.year === state.year;
@@ -224,9 +231,13 @@ function applyFilter() {
   dom.segmentCount.textContent = visibleSegments.length;
   dom.journeyCount.textContent = visibleTrips.length;
   dom.airportCount.textContent = visibleAirports.length;
+  dom.countryCount.textContent = visibleCountries.size;
+  dom.distanceCount.textContent = formatDistance(distance);
+  dom.airtimeCount.textContent = formatDuration(airtime);
   dom.segmentLabel.textContent = visibleSegments.length === 1 ? 'flight leg' : 'flight legs';
   dom.journeyLabel.textContent = visibleTrips.length === 1 ? 'journey' : 'journeys';
   dom.airportLabel.textContent = visibleAirports.length === 1 ? 'airport' : 'airports';
+  dom.countryLabel.textContent = visibleCountries.size === 1 ? 'country' : 'countries';
 
   globe.arcsData(visibleSegments).pointsData(visibleAirports);
   refreshPlanes(visibleSegments);
@@ -265,6 +276,14 @@ function clearSelection() {
 }
 
 function renderTripPanel(trip) {
+  const tripSegments = trip.segments.map((segment) => ({
+    ...segment,
+    start: AIRPORTS[segment.from],
+    end: AIRPORTS[segment.to]
+  }));
+  const tripDistance = getSegmentsDistance(tripSegments);
+  const tripAirtime = getSegmentsAirtime(tripSegments);
+
   dom.routePanel.classList.remove('is-empty');
   dom.routePanel.setAttribute('aria-hidden', 'false');
   dom.panelEyebrow.textContent = `${trip.year} journey`;
@@ -275,6 +294,20 @@ function renderTripPanel(trip) {
         <h2>${escapeHtml(trip.name)}</h2>
       </div>
     </div>
+    <dl class="trip-stats" aria-label="Journey statistics">
+      <div>
+        <dt>distance</dt>
+        <dd>${formatDistance(tripDistance)} km</dd>
+      </div>
+      <div>
+        <dt>est. airtime</dt>
+        <dd>${formatDuration(tripAirtime)}</dd>
+      </div>
+      <div>
+        <dt>flight legs</dt>
+        <dd>${trip.segments.length}</dd>
+      </div>
+    </dl>
     <ol class="segment-list" aria-label="Flight legs">
       ${trip.segments.map((segment, index) => segmentMarkup(segment, index, trip.segments.length)).join('')}
     </ol>
@@ -297,6 +330,8 @@ function renderEmptyPanel() {
 function segmentMarkup(segment, index, total) {
   const from = AIRPORTS[segment.from];
   const to = AIRPORTS[segment.to];
+  const distance = haversine(from, to);
+  const airtime = estimateAirtime(distance);
   return `
     <li class="segment-item" style="--segment-index: ${index}">
       <div class="segment-rail" aria-hidden="true">
@@ -309,7 +344,7 @@ function segmentMarkup(segment, index, total) {
           <span aria-hidden="true">→</span>
           <strong>${escapeHtml(segment.to)}</strong>
         </div>
-        <p>${escapeHtml(from.city)} to ${escapeHtml(to.city)}</p>
+        <p>${escapeHtml(from.city)} to ${escapeHtml(to.city)} · ${formatDistance(distance)} km · ${formatDuration(airtime)}</p>
       </div>
     </li>
   `;
@@ -510,6 +545,32 @@ function haversine(start, end) {
   const deltaLng = toRadians(end.lng - start.lng);
   const value = Math.sin(deltaLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLng / 2) ** 2;
   return 2 * radius * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value));
+}
+
+function getSegmentsDistance(segments) {
+  return segments.reduce((sum, segment) => sum + haversine(segment.start, segment.end), 0);
+}
+
+function getSegmentsAirtime(segments) {
+  return segments.reduce((sum, segment) => {
+    const distance = haversine(segment.start, segment.end);
+    return sum + estimateAirtime(distance);
+  }, 0);
+}
+
+function estimateAirtime(distance) {
+  const minutes = Math.max(45, (distance / 800) * 60 + 20);
+  return Math.round(minutes / 5) * 5;
+}
+
+function formatDistance(distance) {
+  return Math.round(distance).toLocaleString('en-US');
+}
+
+function formatDuration(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return remainingMinutes ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
 }
 
 function toRadians(value) {

@@ -15,7 +15,32 @@
       <header class="brand-panel enter-stage" style="--enter-delay: 80ms">
         <h1>vic's flights</h1>
         <p class="intro">five years in motion.</p>
-        <p class="stats" aria-label="Flight totals"><strong id="segmentCount">27</strong> <span id="segmentLabel">flight legs</span> · <strong id="journeyCount">13</strong> <span id="journeyLabel">journeys</span> · <strong id="airportCount">18</strong> <span id="airportLabel">airports</span></p>
+        <dl class="stats" aria-label="Flight totals">
+          <div class="stat-item stat-item-primary">
+            <dt id="segmentLabel">flight legs</dt>
+            <dd id="segmentCount">27</dd>
+          </div>
+          <div class="stat-item stat-item-primary">
+            <dt>kilometers</dt>
+            <dd id="distanceCount">0</dd>
+          </div>
+          <div class="stat-item stat-item-primary">
+            <dt>est. airtime</dt>
+            <dd id="airtimeCount">0h</dd>
+          </div>
+          <div class="stat-item">
+            <dt id="journeyLabel">journeys</dt>
+            <dd id="journeyCount">13</dd>
+          </div>
+          <div class="stat-item">
+            <dt id="airportLabel">airports</dt>
+            <dd id="airportCount">18</dd>
+          </div>
+          <div class="stat-item">
+            <dt id="countryLabel">countries</dt>
+            <dd id="countryCount">11</dd>
+          </div>
+        </dl>
 
         <fieldset class="year-filter" aria-label="Filter flights by year">
           <legend class="sr-only">Filter flights by year</legend>
