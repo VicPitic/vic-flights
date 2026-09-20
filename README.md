@@ -6,7 +6,7 @@ Live at [flights.vic.ceo](https://flights.vic.ceo), with a Netlify fallback at [
 
 ## What it includes
 
-- 29 mapped flight legs across 14 journeys
+- 31 mapped flight legs across 16 journeys
 - Separate arcs for connecting flights
 - Future and year filtering with an accessible journey picker
 - Route details limited to years and airport paths
