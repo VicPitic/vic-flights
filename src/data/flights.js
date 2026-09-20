@@ -16,6 +16,7 @@ export const AIRPORTS = {
   OTP: { code: 'OTP', city: 'Bucharest', country: 'Romania', lat: 44.5711, lng: 26.085 },
   FRA: { code: 'FRA', city: 'Frankfurt', country: 'Germany', lat: 50.0379, lng: 8.5622 },
   SFO: { code: 'SFO', city: 'San Francisco', country: 'United States', lat: 37.6213, lng: -122.379 },
+  MUC: { code: 'MUC', city: 'Munich', country: 'Germany', lat: 48.3538, lng: 11.7861 },
   MSP: { code: 'MSP', city: 'Minneapolis–Saint Paul', country: 'United States', lat: 44.8848, lng: -93.2223 }
 };
 
@@ -130,11 +131,20 @@ export const FLIGHTS = [
   {
     id: 'minneapolis-2026',
     year: 2026,
-    future: true,
     name: 'Minneapolis',
     segments: [
       { from: 'SFO', to: 'MSP' },
       { from: 'MSP', to: 'SFO' }
+    ]
+  },
+  {
+    id: 'budapest-return-2026',
+    year: 2026,
+    future: true,
+    name: 'Budapest via Munich',
+    segments: [
+      { from: 'SFO', to: 'MUC' },
+      { from: 'MUC', to: 'BUD' }
     ]
   }
 ];
